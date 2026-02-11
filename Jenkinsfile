@@ -1,31 +1,25 @@
-pipeline {
+pipeline{
   agent { label 'linux-agent-new' }
-
-  environment {
+  environment { 
     VENV = 'venv'
   }
-
   stages {
-
     stage('Checkout Code') {
       steps {
         git branch: 'main', url: 'https://github.com/madhuri75jha/flask_app.git'
       }
     }
-
     stage('Setup Python Environment') {
       steps {
         sh '''
         sudo apt update
         sudo apt install -y python3-venv
-
         python3 -m venv $VENV
         . $VENV/bin/activate
         pip install --upgrade pip
         '''
-      }
+        }
     }
-
     stage('Install Dependencies') {
       steps {
         sh '''
@@ -34,33 +28,30 @@ pipeline {
         '''
       }
     }
-
-    stage('Run Tests') {
+     stage('RUN TESTS') {
       steps {
         sh '''
         . $VENV/bin/activate
-        echo "NO TESTS defined yet - SKIPPING"
+        echo 'NO Tests defined yet - SKIPPING'
         '''
       }
     }
-
-    stage('Run Flask Application') {
+      stage('RUN FLASK APPLICATION') {
       steps {
         sh '''
         . $VENV/bin/activate
-        echo "Starting FLASK APP..."
-        nohup python app.py > app.log 2>&1 &
+        echo 'STARTING FLASK APP...'
+        nohup python app.py > app.log 2>&1&
         '''
       }
     }
   }
-
   post {
     success {
-      echo 'Flask CI/CD pipeline executed successfully'
+      echo 'FLASK CI/CD pipeline executed SUCCESSFULLY'
     }
     failure {
-      echo 'PIPELINE FAILED!!! Check LOGS'
+      echo 'PIPELINE FAILED!!! CHECK LOGS'
     }
   }
 }
