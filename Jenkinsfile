@@ -41,7 +41,7 @@ pipeline{
         sh '''
         . $VENV/bin/activate
         echo 'STARTING FLASK APP...'
-        python app.py 
+        nohup python app.py > app.log 2>&1 & 
         '''
       }
     }
